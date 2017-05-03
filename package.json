@@ -1,0 +1,35 @@
+{
+  "name": "bioreator-api",
+  "version": "0.1.0",
+  "main": "./src/server.js",
+  "author": "MatheusGodinho",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon -w src --exec npm run devcheck",
+    "start": "node dist/server.js",
+    "devcheck": "eslint --ext .js src && babel-node src/server.js || true",
+    "lint": "eslint --ext .js src || true",
+    "prestart": "babel src --out-dir dist"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "morgan": "^1.8.1",
+    "nodemon": "^1.11.0",
+    "thinky": "^2.3.8",
+    "webpack-merge": "^4.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1"
+  }
+}
+

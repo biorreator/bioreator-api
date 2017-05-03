@@ -1,0 +1,10 @@
+node_modules
+*.lock
+
+.DS_Store
+*.swp
+
+*.txt
+dist
+
+rethinkdb_data
