@@ -1,12 +1,16 @@
 import { version } from '../../package.json'
 import { Router } from 'express'
 import reactionRouter from './reaction'
+import reactionMeasuresRouter from './reaction-measure'
 
 export default ({ config, db }) => {
   let api = Router()
 
   // Add model routes
-  api.use('/reaction', reactionRouter({ config, db }))
+  var reactions = reactionRouter({ config, db })
+
+  api.use('/reaction', reactions)
+  reactions.use('/:reaction/measures', reactionMeasuresRouter({ config, db }))
 
   api.get('/', (req, res) => {
     res.json({ version })

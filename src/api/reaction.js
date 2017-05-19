@@ -1,15 +1,52 @@
 import { Router } from 'express'
+import Reaction from '../models/reaction'
 
 export default ({ config, db }) => {
   let router = Router()
 
-  router.post('/changeTemperature', async ({ body }, res) => {
+  router.param('reaction', (req, resp, next, id) => {
+    req.reaction = Reaction.get(id)
+    next()
+  })
+
+  router.get('/', async ({ body }, res) => {
     try {
-      var temperature = body.temperature
-      res.json({message: 'Temperatura alterada com sucesso para ' + temperature + '. Aguarde um momento'})
+      var reactions = await Reaction.run()
+      res.json(reactions)
     } catch (err) {
-      console.log(err)
-      res.status(404).json({ error: err.name })
+      res.status(404).json({ error: err.name + ': ' + err.message })
+    }
+  })
+
+  router.post('/', async ({ body }, res) => {
+    try {
+      const now = new Date()
+      var reaction = body.reaction
+      reaction.startTime = now
+      if (reaction.volume < 15 || reaction.volume > 20) {
+        res.status(404).json({ error: 'Volume inválido' })
+      } else {
+        res.json(await Reaction.save(reaction))
+      }
+    } catch (err) {
+      res.status(404).json({ error: err.name + ': ' + err.message })
+    }
+  })
+
+  router.put('/:reaction', async ({ reaction, body }, res) => {
+    try {
+      let doc = await reaction
+      res.json(await doc.merge(body.reaction).save())
+    } catch (err) {
+      res.status(404).json({ error: err.name + ': ' + err.message })
+    }
+  })
+
+  router.delete('/:reaction', async ({ reaction, body }, res) => {
+    try {
+      res.json(await reaction.delete())
+    } catch (err) {
+      res.status(404).json({ error: err.name + ': ' + err.message })
     }
   })
 
