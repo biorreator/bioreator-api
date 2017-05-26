@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import Measure from '../models/measure'
+import { densityToBrix, densityByPressureDiff } from '../helpers/transformations'
 
 export default ({ config, db }) => {
   let router = Router({ mergeParams: true })
@@ -19,11 +20,13 @@ export default ({ config, db }) => {
 
   router.post('/', async ({ reaction, body }, res) => {
     try {
-      var measure = body.measure
+      var measure = {}
+      measure.temperature = body.temperature
       measure.time = new Date()
-      measure.brix = 100
-      measure.alcoholicContents = 5
-      console.log(measure)
+      const density = densityByPressureDiff(body.pressureA, body.pressureB)
+      const brix = densityToBrix(density)
+      measure.density = density
+      measure.brix = brix
       await Measure.save(measure)
       res.json(await reaction.addRelation('measures', await measure))
     } catch (err) {

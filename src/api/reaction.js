@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import Reaction from '../models/reaction'
+import { densityToBrix } from '../helpers/transformations'
 
 export default ({ config, db }) => {
   let router = Router()
@@ -50,5 +51,14 @@ export default ({ config, db }) => {
     }
   })
 
+  router.post('/transform/', async ({ body }, res) => {
+    try {
+      var brix = densityToBrix(body.density)
+      console.log(body.density, brix)
+      res.json(brix)
+    } catch (err) {
+      res.status(404).json({ error: err.name + ': ' + err.message })
+    }
+  })
   return router
 }
