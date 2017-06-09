@@ -19,10 +19,21 @@ export default ({ config, db }) => {
     }
   })
 
+  router.get('/get-current-reaction', async ({ body }, res) => {
+    try {
+      var reactions = await Reaction.filter({status: true}).run()
+      var reaction = reactions[0]
+      res.json({reaction})
+    } catch (err) {
+      res.status(404).json({ error: err.name + ': ' + err.message })
+    }
+  })
+
   router.post('/', async ({ body }, res) => {
     try {
       const now = new Date()
       var reaction = body.reaction
+      reaction.status = true
       reaction.startTime = now
       if (reaction.volume < 15 || reaction.volume > 20) {
         res.status(404).json({ error: 'Volume inválido' })
