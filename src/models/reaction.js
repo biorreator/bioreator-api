@@ -5,6 +5,7 @@ let Reaction = thinky.createModel('Reactions', {
   title: type.string().required(),
   volume: type.number().required(),
   startTime: type.date().required(),
+  status: type.boolean().required(),
   endTime: type.date()
 })
 
