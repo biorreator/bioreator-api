@@ -4,9 +4,10 @@ module.exports = {
   host: 'localhost',
   port: '3000',
   database: {
-    host: 'localhost',
-    port: '27017',
-    name: 'bioreator-prod-db'
+    host: (process.env.DOCKHERO_HOST || 'localhost'),
+    port: '2801',
+    db: 'test',
+    password: (process.env.RETHINKDB_PASSWORD || 'app')
   },
   seed: '/seeds/prod-seed.js',
   secret: '6f6b32a97bfdc5ac3112d782b5a5d7bc7d198e08'
