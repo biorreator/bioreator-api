@@ -1,8 +1,7 @@
 var thinky = require('thinky')({
-  host: (process.env.DOCKHERO_HOST || 'localhost'),
-  port: '2801',
-  db: 'test',
-  password: (process.env.RETHINKDB_PASSWORD || 'app')
+  host: process.env.DOCKHERO_HOST,
+  password: process.env.RETHINKDB_PASSWORD,
+  db: process.env.RETHINKDB_DB
 })
 var { type, r } = thinky
 
