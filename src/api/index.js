@@ -9,7 +9,7 @@ export default ({ config, db }) => {
   // Add model routes
   var reactions = reactionRouter({ config, db })
 
-  api.use('/reaction', reactions)
+  api.use('/reactions', reactions)
   reactions.use('/:reaction/measures', reactionMeasuresRouter({ config, db }))
 
   api.get('/', (req, res) => {
