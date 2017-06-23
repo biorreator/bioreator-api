@@ -6,6 +6,7 @@ let Measure = thinky.createModel('Measures', {
   pressure: type.number(),
   density: type.number().required(),
   brix: type.number().required(),
+  ph: type.number().required(),
   alcoholicContents: type.number()
 })
 

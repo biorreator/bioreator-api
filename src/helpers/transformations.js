@@ -1,7 +1,7 @@
 const waterDensity = 1
 const alcoholMOLs = 131
-const heightDiff = 0.25
-const gravity = 9.8
+// const heightDiff = 0.25
+// const gravity = 9.8
 
 function densityToBrix (density) {
   const specificGravity = density / waterDensity
@@ -14,10 +14,10 @@ function actualGLDegree (lastDensity, actualDensity) {
   return GLDegree.toFixed(1)
 }
 
-function densityByPressureDiff (pressureA, pressureB) {
-  const delta = Math.abs(pressureB - pressureA)
-  const density = delta / (heightDiff * gravity)
-  return density
-}
+// function densityByPressureDiff (pressureA, pressureB) {
+//   const delta = Math.abs(pressureB - pressureA)
+//   const density = delta / (heightDiff * gravity)
+//   return density
+// }
 
-export { densityToBrix, actualGLDegree, densityByPressureDiff }
+export { densityToBrix, actualGLDegree }
