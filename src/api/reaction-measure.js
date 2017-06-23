@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import Measure from '../models/measure'
-import { densityToBrix, densityByPressureDiff } from '../helpers/transformations'
+import { r } from '../db'
+import { densityToBrix } from '../helpers/transformations'
 
 export default ({ config, db }) => {
   let router = Router({ mergeParams: true })
@@ -12,7 +13,12 @@ export default ({ config, db }) => {
 
   router.get('/', async ({ reaction, params }, res) => {
     try {
-      res.json((await reaction.getJoin({measures: true})).measures || [])
+      res.json((await reaction.getJoin({
+        measures: {
+          _apply (sequence) {
+            return sequence.orderBy(r.desc('time'))
+          }
+        }})).measures || [])
     } catch (err) {
       res.status(404).json({ error: err.name + ': ' + err.message })
     }
@@ -23,10 +29,11 @@ export default ({ config, db }) => {
       var measure = {}
       measure.temperature = body.temperature
       measure.time = new Date()
-      const density = densityByPressureDiff(body.pressureA, body.pressureB)
-      const brix = densityToBrix(density)
-      measure.density = density
+      measure.density = body.density
+      measure.ph = body.ph
+      const brix = densityToBrix(body.density)
       measure.brix = brix
+      measure.alcoholicContents = 46
       await Measure.save(measure)
       res.json(await reaction.addRelation('measures', await measure))
     } catch (err) {
@@ -37,6 +44,29 @@ export default ({ config, db }) => {
   router.delete('/:measure', async ({ reaction, measure }, res) => {
     try {
       res.json(await reaction.removeRelation('measures', await measure))
+    } catch (err) {
+      res.status(404).json({ error: err.name + ': ' + err.message })
+    }
+  })
+
+  router.get('/graph', async ({ reaction, params }, res) => {
+    try {
+      var measuresModel = await reaction.getJoin({
+        measures: {
+          _apply (sequence) {
+            return sequence.orderBy(r.desc('time'))
+          }
+        }
+      })
+      var measures = measuresModel.measures
+      var brixData = measures.map((measure, index) => {
+        return { x: index, y: measure.brix }
+      })
+      var glData = measures.map((measure, index) => {
+        return { x: index, y: measure.alcoholicContents }
+      })
+
+      res.json({brixData, glData})
     } catch (err) {
       res.status(404).json({ error: err.name + ': ' + err.message })
     }
