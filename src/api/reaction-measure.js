@@ -65,8 +65,8 @@ export default ({ config, db }) => {
       var glData = measures.map((measure, index) => {
         return { x: index, y: measure.alcoholicContents }
       })
-
-      res.json({brixData, glData})
+      var array = [glData, brixData]
+      res.json(array)
     } catch (err) {
       res.status(404).json({ error: err.name + ': ' + err.message })
     }
