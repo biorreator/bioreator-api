@@ -11,7 +11,7 @@ export default ({ config, db }) => {
       var options = {
         mode: 'text',
         pythonOptions: ['-u'],
-        scriptPath: 'home/pi/Desktop/pi2/bioretor-api/scripts',
+        scriptPath: '/home/pi/Desktop/pi2/bioreator-api/scripts',
         args: [port]
       }
       PythonShell.run('turn_' + mode + '.py', options, function (err, results) {
