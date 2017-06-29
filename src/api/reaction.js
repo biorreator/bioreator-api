@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import Reaction from '../models/reaction'
 import { densityToBrix } from '../helpers/transformations'
+import { sendPush } from '../helpers/pushnotification'
 
 export default ({ config, db }) => {
   let router = Router()
@@ -56,6 +57,15 @@ export default ({ config, db }) => {
       var brix = densityToBrix(body.density)
       console.log(body.density, brix)
       res.json(brix)
+    } catch (err) {
+      res.status(404).json({ error: err.name + ': ' + err.message })
+    }
+  })
+
+  router.get('/addSugar/', async (res) => {
+    try {
+      sendPush('Por favor, adicione mais açúcar ao reservatório')
+      res.json('Push enviado com sucesso')
     } catch (err) {
       res.status(404).json({ error: err.name + ': ' + err.message })
     }

@@ -15,6 +15,7 @@
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "morgan": "^1.8.1",
+    "node-gcm": "^0.14.6",
     "nodemon": "^1.11.0",
     "thinky": "^2.3.8",
     "webpack-merge": "^4.1.0"
@@ -32,4 +33,3 @@
     "eslint-plugin-standard": "^3.0.1"
   }
 }
-
