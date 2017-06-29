@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import Measure from '../models/measure'
 import { r } from '../db'
-import { densityToBrix } from '../helpers/transformations'
+import { densityToBrix, actualGLDegree } from '../helpers/transformations'
 
 export default ({ config, db }) => {
   let router = Router({ mergeParams: true })
@@ -33,7 +33,22 @@ export default ({ config, db }) => {
       measure.ph = body.ph
       const brix = densityToBrix(body.density)
       measure.brix = brix
-      measure.alcoholicContents = 46
+      var measuresModel = await reaction.getJoin({
+        measures: {
+          _apply (sequence) {
+            return sequence.orderBy(r.desc('time'))
+          }
+        }
+      })
+      var measures = measuresModel.measures
+      if (measures.length >= 1) {
+        var lastDensity = measures[0].density
+        var actualGL = actualGLDegree(lastDensity, body.density)
+        console.log(measures[0].alcoholicContents, actualGL)
+        measure.alcoholicContents = measures[0].alcoholicContents + (actualGL * 1)
+      } else {
+        measure.alcoholicContents = 0
+      }
       await Measure.save(measure)
       res.json(await reaction.addRelation('measures', await measure))
     } catch (err) {
