@@ -1,10 +1,9 @@
-const waterDensity = 1
 const alcoholMOLs = 131
 // const heightDiff = 0.25
 // const gravity = 9.8
 
 function densityToBrix (density) {
-  const specificGravity = density / waterDensity
+  const specificGravity = density / 1000
   const brix = (((182.4601 * specificGravity - 775.6821) * specificGravity + 1262.7794) * specificGravity - 669.5622)
   return brix.toFixed(1)
 }
