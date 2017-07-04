@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import Reaction from '../models/reaction'
+import { r } from '../db'
 import { densityToBrix } from '../helpers/transformations'
 import { sendPush } from '../helpers/pushnotification'
 
@@ -13,18 +14,14 @@ export default ({ config, db }) => {
 
   router.get('/', async ({ body }, res) => {
     try {
-      var reactions = await Reaction.run()
+      var reactions = await Reaction.getJoin({
+        measures: {
+          _apply (sequence) {
+            return sequence.orderBy(r.asc('time'))
+          }
+        }
+      }).run()
       res.json(reactions)
-    } catch (err) {
-      res.status(404).json({ error: err.name + ': ' + err.message })
-    }
-  })
-
-  router.get('/get-current-reaction', async ({ body }, res) => {
-    try {
-      var reactions = await Reaction.filter({status: true}).run()
-      var reaction = reactions[0]
-      res.json({reaction})
     } catch (err) {
       res.status(404).json({ error: err.name + ': ' + err.message })
     }
