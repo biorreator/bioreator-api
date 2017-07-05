@@ -1,4 +1,5 @@
 import cron from 'cron'
+import { sendPush } from './pushnotification'
 import PythonShell from 'python-shell'
 
 var createNewJob = function (minute, reactionId) {
@@ -10,12 +11,14 @@ var createNewJob = function (minute, reactionId) {
         mode: 'text',
         pythonOptions: ['-u'],
         scriptPath: '/home/pi/Desktop/pi2/biorreator-sensors-communication',
+        // scriptPath: '/Users/matheusgodinho/Desktop/bioretor-pi',
         args: [reactionId]
       }
       PythonShell.run('sensors_communication.py', options, (err, results) => {
         if (err) {
-          console.log(err)
+          throw new Error(err)
         }
+        // sendPush('Uma nova medida foi coletada para essa hora')
         console.log('Enviando post de medidas')
       })
     },
