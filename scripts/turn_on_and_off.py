@@ -4,6 +4,7 @@ import RPi.GPIO as GPIO
 #Definindo a biblioteca TIME
 import time
 import sys
+from time import sleep
 
 #Aqui definimos que vamos usar o numero de ordem de Porta, e nao o numero que refere a BOARD.
 # Para alterar troque GPIO.BCM para GPIO.BOARD
@@ -21,7 +22,7 @@ pinList = [sys.argv[1]]
 # Criamos um laco com as portas listadas em pinList (ex. 2,3,4,7...) e setamos o valor como OUT (False/0)
 
 for i in pinList:
-    GPIO.setup(int(i), GPIO.OUT)
+    GPIO.setup(int(sys.argv[1]), GPIO.OUT)
 #    GPIO.output(i, GPIO.HIGH) # Comentei para se saber o oposto, ou seja, valor como HIGH (Verdadeiro/1)
 
 
@@ -30,6 +31,7 @@ for i in pinList:
 try:
   GPIO.output(int(sys.argv[1]), GPIO.HIGH)
   print "ON"
+  time.sleep(1000)  # Time in seconds.
   GPIO.output(int(sys.argv[1]), GPIO.LOW)
   print "OFF"
 
