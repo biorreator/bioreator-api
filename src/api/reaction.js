@@ -57,7 +57,7 @@ export default ({ config, db }) => {
     try {
       let doc = await reaction
       const now = new Date()
-      // await doc.merge({started: true, startTime: now}).save()
+      await doc.merge({started: true, startTime: now}).save()
       createNewJob(now.getMinutes(), doc.id)
 
       // var options1 = {

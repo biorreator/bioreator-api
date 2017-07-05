@@ -16,7 +16,7 @@ var createNewJob = function (minute, reactionId) {
         if (err) {
           console.log(err)
         }
-        console.log("Enviando post de medidas")
+        console.log('Enviando post de medidas')
       })
     },
     start: false,
