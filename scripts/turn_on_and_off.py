@@ -32,7 +32,7 @@ try:
   GPIO.output(int(sys.argv[1]), GPIO.HIGH)
   print "ON"
 
-  time.sleep(0.1)
+  time.sleep(1000)
   GPIO.output(int(sys.argv[1]), GPIO.LOW)
   print "OFF"
 
