@@ -1,5 +1,4 @@
 import cron from 'cron'
-import { sendPush } from './pushnotification'
 import PythonShell from 'python-shell'
 
 var createNewJob = function (minute, reactionId) {
@@ -18,7 +17,6 @@ var createNewJob = function (minute, reactionId) {
         if (err) {
           throw new Error(err)
         }
-        // sendPush('Uma nova medida foi coletada para essa hora')
         console.log('Enviando post de medidas')
       })
     },

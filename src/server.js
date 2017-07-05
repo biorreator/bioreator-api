@@ -35,8 +35,8 @@ const job = new cron.CronJob({
     var options = {
       mode: 'text',
       pythonOptions: ['-u'],
-      // scriptPath: '/home/pi/Desktop/pi2/biorreator-sensors-communication',
-      scriptPath: '/Users/matheusgodinho/Desktop/bioretor-pi',
+      scriptPath: '/home/pi/Desktop/pi2/biorreator-sensors-communication',
+      // scriptPath: '/Users/matheusgodinho/Desktop/bioretor-pi',
       args: []
     }
     PythonShell.run('sensors_static_data.py', options, (err, results) => {
@@ -44,7 +44,7 @@ const job = new cron.CronJob({
         throw new Error(err)
       }
       const temp = parseInt(results[0])
-      if (temp === 60 && !start) {
+      if (temp >= 56 && !start) {
         start = true
         sendPush('O aquecimento atingiu 60 graus')
         _.delay(sendEnd, 60 * 1000)

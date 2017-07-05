@@ -2,6 +2,7 @@ import { Router } from 'express'
 import Measure from '../models/measure'
 import { r } from '../db'
 import { densityToBrix, actualGLDegree } from '../helpers/transformations'
+import { sendPush } from '../helpers/pushnotification'
 
 export default ({ config, db }) => {
   let router = Router({ mergeParams: true })
@@ -50,6 +51,8 @@ export default ({ config, db }) => {
         measure.alcoholicContents = 0
       }
       await Measure.save(measure)
+      const message = 'Uma nova medida foi adicionada para a reação'
+      sendPush(message)
       res.json(await reaction.addRelation('measures', await measure))
     } catch (err) {
       res.status(404).json({ error: err.name + ': ' + err.message })
