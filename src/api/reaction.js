@@ -41,6 +41,7 @@ export default ({ config, db }) => {
         if (err) {
           console.log(err)
         }
+	console.log(results)
         const measure = {
           temperature: results[0],
           ph: results[1],
