@@ -70,9 +70,11 @@ export default ({ config, db }) => {
       }
       for (var index = 0; index < rotations; index++) {
         PythonShell.run('turn_on_and_off.py', options, function (err, results) {
-          if (err) throw err
-          // results is an array consisting of messages collected during execution
-          console.log('results: %j', results)
+          if (err) console.log(err.message)
+          else {
+            // results is an array consisting of messages collected during execution
+            console.log('results: %j', results)
+          }
         })
       }
       res.json({teste: 'Açucar adicionado com sucesso.'})
