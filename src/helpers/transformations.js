@@ -9,7 +9,7 @@ function densityToBrix (density) {
 }
 
 function actualGLDegree (lastDensity, actualDensity) {
-  const GLDegree = (lastDensity - actualDensity) * alcoholMOLs
+  const GLDegree = (lastDensity / 1000 - actualDensity / 1000) * alcoholMOLs
   return GLDegree.toFixed(1)
 }
 

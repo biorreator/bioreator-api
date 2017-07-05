@@ -1,6 +1,6 @@
 import gcm from 'node-gcm'
 const senderId = 'AAAAQfYxQL4:APA91bGmPm92cwBwL70bp2-2xe-19pLA1kEuuRKoWE-XlTJqZyhFZbBXh9qO_ThLDe9_0bXj0eVvjKUJIlPMPMJiLHeCtQzTaYXTPqt_I9rycbwStVW_Fu0Sl_I_FwwKRyUKFnNfcJ1D'
-const regTokens = ['dWa-mQ7pfDc:APA91bETuzB95iRYka7LawEyiVjs-Tz6EWpFXrWPwhGZ1w7-smMm_vKXpBomoCpCyPMf-1Qj3iZOyo79S-suEIjjAnNAhhIyHoj2O55DAQGkrlV38JYh6aiJFIAaLxJpN3iLl2FEjgtI']
+const regTokens = ['cUnOJQ9vDOw:APA91bFSBHyWO_bHzqUw04k2bksj77rmv4GAiAqH1tlByONJ6YRmil8-mcTOWXrveVFgQI1xvrDTcaRoK8t7yrIQ-xIfVej91q4Wj0RJek1YUdrMaQ-w2VG0Eb9PuccBpOvw54anEy0g']
 
 var sendPush = function (pushMessage) {
   var sender = new gcm.Sender(senderId)

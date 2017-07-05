@@ -1,7 +1,10 @@
 import { Router } from 'express'
 import Reaction from '../models/reaction'
+import { r } from '../db'
 import { densityToBrix } from '../helpers/transformations'
 import { sendPush } from '../helpers/pushnotification'
+import PythonShell from 'python-shell'
+import { createNewJob } from '../helpers/measureRoutine'
 
 export default ({ config, db }) => {
   let router = Router()
@@ -13,18 +16,65 @@ export default ({ config, db }) => {
 
   router.get('/', async ({ body }, res) => {
     try {
-      var reactions = await Reaction.run()
+      var reactions = await Reaction.getJoin({
+        measures: {
+          _apply (sequence) {
+            return sequence.orderBy(r.asc('time'))
+          }
+        }
+      }).run()
       res.json(reactions)
     } catch (err) {
       res.status(404).json({ error: err.name + ': ' + err.message })
     }
   })
 
-  router.get('/get-current-reaction', async ({ body }, res) => {
+  router.get('/get-current-measures', async ({ body }, res) => {
     try {
-      var reactions = await Reaction.filter({status: true}).run()
-      var reaction = reactions[0]
-      res.json({reaction})
+      var options = {
+        mode: 'text',
+        pythonOptions: ['-u'],
+        scriptPath: '/Users/matheusgodinho/Desktop/bioretor-pi',
+        args: [17]
+      }
+      PythonShell.run('teste.py', options, function (err, results) {
+        if (err) {
+          console.log(err)
+        }
+        const measure = {
+          temperature: results[0],
+          ph: results[1],
+          density: results[2]
+        }
+        res.json(measure)
+      })
+    } catch (err) {
+      res.status(404).json({ error: err.name + ': ' + err.message })
+    }
+  })
+
+  router.get('/:reaction/start', async ({ reaction }, res) => {
+    try {
+      let doc = await reaction
+      const now = new Date()
+      // await doc.merge({started: true, startTime: now}).save()
+      createNewJob(now.getMinutes(), doc.id)
+
+      // var options1 = {
+      //   mode: 'text',
+      //   pythonOptions: ['-u'],
+      //   scriptPath: '/home/pi/Desktop/pi2/bioreator-api/scripts',
+      //   args: [17]
+      // }
+      // var options2 = {
+      //   mode: 'text',
+      //   pythonOptions: ['-u'],
+      //   scriptPath: '/home/pi/Desktop/pi2/bioreator-api/scripts',
+      //   args: [22]
+      // }
+      // await PythonShell.run('turn_on.py', options1)
+      // await PythonShell.run('turn_off.py', options2)
+      res.json('Reação iniciada')
     } catch (err) {
       res.status(404).json({ error: err.name + ': ' + err.message })
     }
@@ -32,10 +82,8 @@ export default ({ config, db }) => {
 
   router.post('/', async ({ body }, res) => {
     try {
-      const now = new Date()
       var reaction = body.reaction
       reaction.status = true
-      reaction.startTime = now
       if (reaction.volume < 15 || reaction.volume > 20) {
         res.status(404).json({ error: 'Volume inválido' })
       } else {

@@ -31,7 +31,8 @@ for i in pinList:
 try:
   GPIO.output(int(sys.argv[1]), GPIO.HIGH)
   print "ON"
-  time.sleep(1000)  # Time in seconds.
+
+  time.sleep(0.1)
   GPIO.output(int(sys.argv[1]), GPIO.LOW)
   print "OFF"
 
