@@ -125,20 +125,6 @@ export default ({ config, db }) => {
     try {
       sendPush('Por favor, adicione mais açúcar ao reservatório')
       res.json('Push enviado com sucesso')
-      try {
-        var options = {
-          mode: 'text',
-          pythonOptions: ['-u'],
-          scriptPath: '/home/pi/Desktop/pi2/biorreator-sensors-communication',
-        }
-        PythonShell.run('check_ultrasonic_sensor.py', options, function (err, results) {
-          if (err) {
-            console.log(err)
-          }
-        })
-      } catch (err) {
-        res.status(404).json({ error: err.name + ': ' + err.message })
-      }
     } catch (err) {
       res.status(404).json({ error: err.name + ': ' + err.message })
     }
