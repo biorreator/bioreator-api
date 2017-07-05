@@ -2,8 +2,9 @@ import cron from 'cron'
 import PythonShell from 'python-shell'
 
 var createNewJob = function (minute, reactionId) {
+  const nextMinute = minute + 1
   const job = new cron.CronJob({
-    cronTime: '00 ' + minute + ' * * * *',
+    cronTime: '00 ' + nextMinute + ' * * * *',
     onTick: async function () {
       var options = {
         mode: 'text',
@@ -15,7 +16,7 @@ var createNewJob = function (minute, reactionId) {
         if (err) {
           console.log(err)
         }
-        console.log("Enviando post de medidas")    
+        console.log("Enviando post de medidas")
       })
     },
     start: false,
