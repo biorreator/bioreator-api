@@ -44,9 +44,9 @@ export default ({ config, db }) => {
           throw new Error(err)
         } else {
           const measure = {
-            temperature: results[0],
-            ph: results[1],
-            density: results[2]
+            temperature: results[1],
+            ph: results[2],
+            density: results[3]
           }
           res.json(measure)
         }
@@ -62,7 +62,6 @@ export default ({ config, db }) => {
       const now = new Date()
       await doc.merge({started: true, startTime: now}).save()
       createNewJob(now.getMinutes(), doc.id)
-
       var options1 = {
         mode: 'text',
         pythonOptions: ['-u'],
@@ -75,8 +74,8 @@ export default ({ config, db }) => {
         scriptPath: '/home/pi/Desktop/pi2/bioreator-api/scripts',
         args: [22]
       }
-      PythonShell.run('turn_off.py', options1)
-      PythonShell.run('turn_off.py', options2)
+      await PythonShell.run('turn_off.py', options1)
+      await PythonShell.run('turn_off.py', options2)
       res.json('Reação iniciada')
     } catch (err) {
       res.status(404).json({ error: err.name + ': ' + err.message })
