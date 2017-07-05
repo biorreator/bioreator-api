@@ -8,14 +8,14 @@ var createNewJob = function (minute, reactionId) {
       var options = {
         mode: 'text',
         pythonOptions: ['-u'],
-        scriptPath: '/Users/matheusgodinho/Desktop/bioretor-pi',
+        scriptPath: '/home/pi/Desktop/pi2/biorreator-sensors-communication',
         args: [reactionId]
       }
-      PythonShell.run('teste2.py', options, (err, results) => {
+      PythonShell.run('sensors_communication.py', options, (err, results) => {
         if (err) {
           console.log(err)
         }
-        console.log(results)
+        console.log("Enviando post de medidas")    
       })
     },
     start: false,

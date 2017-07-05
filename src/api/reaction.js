@@ -34,10 +34,10 @@ export default ({ config, db }) => {
       var options = {
         mode: 'text',
         pythonOptions: ['-u'],
-        scriptPath: '/Users/matheusgodinho/Desktop/bioretor-pi',
+        scriptPath: '/home/pi/Desktop/pi2/biorreator-sensors-communication',
         args: [17]
       }
-      PythonShell.run('teste.py', options, function (err, results) {
+      PythonShell.run('sensors_static_data.py', options, function (err, results) {
         if (err) {
           console.log(err)
         }
